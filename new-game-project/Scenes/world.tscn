@@ -55,6 +55,24 @@ size = Vector3(1, 4.132324, 6.06752)
 [sub_resource type="BoxShape3D" id="BoxShape3D_fo5ed"]
 size = Vector3(1, 2.0567017, 0.7730713)
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8j60k"]
+sky_top_color = Color(0.52546775, 0.0463527, 0.059419118, 1)
+sky_horizon_color = Color(0.16916883, 0.016751068, 0.00044878916, 1)
+ground_bottom_color = Color(0.049078546, 0.0069893147, 0, 1)
+sun_angle_max = 24.69
+energy_multiplier = 1.26
+
+[sub_resource type="Sky" id="Sky_fo5ed"]
+sky_material = SubResource("ProceduralSkyMaterial_8j60k")
+
+[sub_resource type="Environment" id="Environment_fo5ed"]
+background_mode = 2
+sky = SubResource("Sky_fo5ed")
+fog_enabled = true
+fog_light_color = Color(0.13270149, 0.0031465825, 0, 1)
+fog_sun_scatter = 0.18
+fog_density = 0.1767
+
 [node name="World" type="Node3D" unique_id=770086457]
 script = SubResource("GDScript_8j60k")
 
@@ -442,3 +460,6 @@ script = ExtResource("4_8j60k")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint6" unique_id=497646981]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
 shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1406839050]
+environment = SubResource("Environment_fo5ed")
