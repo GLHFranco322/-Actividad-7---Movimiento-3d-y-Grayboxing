@@ -5,38 +5,154 @@ resource_name = "Player"
 script/source = "extends CharacterBody3D
 
 const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
 const CROUCH_SPEED = 2.5
+const MOUSE_SENSITIVITY = 0.003
+const FALL_LIMIT = -150.0
 
-func _physics_process(delta: float) -> void:
-	# Gravedad
+var spawn_position: Vector3
+var checkpoint_position: Vector3
+var monedas = 0
+
+# Salto cargado
+const MIN_JUMP_VELOCITY = 3.0
+const MAX_JUMP_VELOCITY = 8.0
+const MAX_CHARGE_TIME = 0.6
+
+# Doble salto (salto en el aire, velocidad fija)
+const DOUBLE_JUMP_VELOCITY = 5.0
+const MAX_JUMPS = 2
+
+# Dash
+const DASH_SPEED = 16.0
+const DASH_DURATION = 0.2
+
+@onready var camera = $Camera3D
+
+var pitch = 0.0
+
+var is_charging_jump = false
+var jump_charge_time = 0.0
+var jumps_used = 0
+
+var is_dashing = false
+var dash_timer = 0.0
+var dash_direction = Vector3.ZERO
+var can_air_dash = true
+
+func recolectar_moneda():
+	monedas += 1
+	print('cantidad de monedas = ', monedas)
+	_actualizar_hud()
+
+func _actualizar_hud():
+	var label = get_tree().root.get_node(\"World/HUD/MonedasLabel\")
+	if label:
+		label.text = \"Monedas: %d\" % monedas
+
+func set_checkpoint(pos: Vector3):
+	checkpoint_position = pos
+	print(\"Checkpoint guardado en: \", pos)
+
+func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	spawn_position = global_position
+	checkpoint_position = spawn_position
+
+func _unhandled_input(event):
+	if event is InputEventMouseMotion:
+		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+		pitch = clamp(pitch - event.relative.y * MOUSE_SENSITIVITY, deg_to_rad(-89), deg_to_rad(89))
+		camera.rotation.x = pitch
+
+	if event.is_action_pressed(\"ui_cancel\"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+	if event.is_action_pressed(\"Jump\"):
+		_handle_jump_press()
+
+	if event.is_action_released(\"Jump\"):
+		_handle_jump_release()
+
+	if event.is_action_pressed(\"Dash\"):
+		_try_dash()
+
+func _respawn():
+	global_position = checkpoint_position
+	velocity = Vector3.ZERO
+	is_dashing = false
+	is_charging_jump = false
+	jump_charge_time = 0.0
+	jumps_used = 0
+	can_air_dash = true
+
+func _handle_jump_press():
+	if is_on_floor() and jumps_used == 0:
+		is_charging_jump = true
+		jump_charge_time = 0.0
+	elif jumps_used < MAX_JUMPS:
+		velocity.y = DOUBLE_JUMP_VELOCITY
+		jumps_used += 1
+
+func _handle_jump_release():
+	if is_charging_jump:
+		var ratio = clamp(jump_charge_time / MAX_CHARGE_TIME, 0.0, 1.0)
+		velocity.y = lerp(MIN_JUMP_VELOCITY, MAX_JUMP_VELOCITY, ratio)
+		is_charging_jump = false
+		jump_charge_time = 0.0
+		jumps_used += 1
+
+func _try_dash():
+	if is_on_floor() or can_air_dash:
+		is_dashing = true
+		dash_timer = DASH_DURATION
+
+		var input_dir = Input.get_vector(\"MoveLeft\", \"MoveRight\", \"MoveForward\", \"MoveBack\")
+		if input_dir.length() > 0.1:
+			dash_direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		else:
+			dash_direction = -transform.basis.z.normalized()
+
+		velocity.y = 0.0
+
+		if not is_on_floor():
+			can_air_dash = false
+
+func _physics_process(delta):
+	if global_position.y <= FALL_LIMIT:
+		_respawn()
+		return
+
+	if is_on_floor():
+		jumps_used = 0
+		can_air_dash = true
+
+	if is_dashing:
+		dash_timer -= delta
+		velocity.x = dash_direction.x * DASH_SPEED
+		velocity.z = dash_direction.z * DASH_SPEED
+		velocity.y = 0.0
+		move_and_slide()
+		if dash_timer <= 0.0:
+			is_dashing = false
+		return
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Salto
-	if Input.is_action_just_pressed(\"Jump\") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if is_charging_jump:
+		jump_charge_time = min(jump_charge_time + delta, MAX_CHARGE_TIME)
 
-	# Movimiento horizontal
-	var direction := 0.0
+	var speed = CROUCH_SPEED if Input.is_action_pressed(\"Crouch\") else SPEED
 
-	if Input.is_action_pressed(\"MoveRight\"):
-		direction += 1.0
+	var input_dir = Input.get_vector(\"MoveLeft\", \"MoveRight\", \"MoveForward\", \"MoveBack\")
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	if Input.is_action_pressed(\"MoveLeft\"):
-		direction -= 1.0
-
-	# Agacharse
-	var current_speed := SPEED
-
-	if Input.is_action_pressed(\"Crounch\"):
-		current_speed = CROUCH_SPEED
-
-	# Aplicar movimiento
-	if direction != 0:
-		velocity.x = direction * current_speed
+	if direction:
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
 "
@@ -45,7 +161,7 @@ func _physics_process(delta: float) -> void:
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qbkls"]
 
-[node name="Player" type="CharacterBody3D" unique_id=1958674581]
+[node name="Player" type="CharacterBody3D" unique_id=1958674581 groups=["player"]]
 script = SubResource("GDScript_qbkls")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1526385578]
@@ -53,3 +169,6 @@ shape = SubResource("CapsuleShape3D_qbkls")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=698204078]
 mesh = SubResource("CapsuleMesh_qbkls")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=494246889 groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)

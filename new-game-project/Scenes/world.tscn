@@ -1,25 +1,444 @@
 [gd_scene format=3 uid="uid://coar0w52ewb50"]
 
 [ext_resource type="PackedScene" uid="uid://be8qbmt0fe144" path="res://Scenes/Player.tscn" id="1_a02cp"]
+[ext_resource type="PackedScene" uid="uid://dddwaosy02jdt" path="res://Scenes/moneda.tscn" id="2_go701"]
+[ext_resource type="AudioStream" uid="uid://ctvmkx2jmhvvu" path="res://Music/alex-morgan-synthwave-arcade-retro-nights-573647.mp3" id="3_5a7ea"]
+[ext_resource type="Script" uid="uid://c0urpng6vohf6" path="res://Scenes/Checkpoint.gd" id="4_8j60k"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_yp4wr"]
-size = Vector3(9, 1, 1)
+[sub_resource type="GDScript" id="GDScript_8j60k"]
+script/source = "extends Node3D
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_a02cp"]
-points = PackedVector3Array(-4.571429, -0.5714286, -0.5714286, 4.571429, 0.5714286, 0.5714286, 4.571429, 0.5714286, -0.5714286, -4.571429, 0.5714286, 0.5714286, 4.571429, -0.5714286, 0.5714286, 4.571429, -0.5714286, -0.5714286, -4.571429, 0.5714286, -0.5714286, -4.571429, -0.5714286, 0.5714286)
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_fo5ed"]
+script/source = "extends CSGBox3D
+
+const ROTATION_SPEED = 1.0  # radianes por segundo
+
+func _ready() -> void:
+	pass
+
+func _process(delta: float) -> void:
+	rotate_y(ROTATION_SPEED * delta)
+"
+
+[sub_resource type="GDScript" id="GDScript_5a7ea"]
+script/source = "extends Area3D
+
+func _ready():
+	body_entered.connect(_on_body_entered)
+
+func _on_body_entered(body):
+	if body.is_in_group(\"player\"):
+		_trigger_victory()
+
+func _trigger_victory():
+	get_tree().paused = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	$\"/root/World/VictoryUI\".visible = true
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5a7ea"]
+size = Vector3(1, 4.132324, 6.06752)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_8j60k"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fo5ed"]
+size = Vector3(1, 2.0567017, 0.7730713)
 
 [node name="World" type="Node3D" unique_id=770086457]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=816436162]
-mesh = SubResource("BoxMesh_yp4wr")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=2002307583]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=72464129]
-shape = SubResource("ConvexPolygonShape3D_a02cp")
+script = SubResource("GDScript_8j60k")
 
 [node name="Player" parent="." unique_id=1958674581 instance=ExtResource("1_a02cp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6240548, 0)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.2834084, 1.8715546, 0.16466737)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1617245781]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2991503, 5.040482)
+[node name="Map" type="Node3D" parent="." unique_id=945544275]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map" unique_id=685156083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01563263, 0, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Map" unique_id=1310356067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.286887, 0, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Map" unique_id=204723301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.970913, 0.41644382, 3.4159255)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Map" unique_id=391252799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.181133, 1.7757664, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Map" unique_id=1187982971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.87792, 1.7757664, -3.2904212)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Map" unique_id=1139926422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.90427, -4.0850425, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Map" unique_id=1573776850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78.77251, -4.0850425, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Map" unique_id=1498228820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 97.592735, -4.0850425, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Map" unique_id=1824216899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115.431046, -2.2487988, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D27" type="CSGBox3D" parent="Map" unique_id=54620135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 154.14207, -54.368927, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+script = SubResource("GDScript_fo5ed")
+
+[node name="CSGBox3D53" type="CSGBox3D" parent="Map" unique_id=781532372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.97794, -60.193966, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+script = SubResource("GDScript_fo5ed")
+
+[node name="CSGBox3D41" type="CSGBox3D" parent="Map" unique_id=1189292186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 162.25488, -54.368927, -3.2904212)
+use_collision = true
+size = Vector3(0.9775162, 1, 1)
+
+[node name="CSGBox3D51" type="CSGBox3D" parent="Map" unique_id=814002746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 170.83678, -54.368927, -3.2904212)
+use_collision = true
+size = Vector3(0.9775162, 1, 1)
+
+[node name="CSGBox3D52" type="CSGBox3D" parent="Map" unique_id=552839670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 170.83678, -54.368927, 2.9964836)
+use_collision = true
+size = Vector3(0.9775162, 1, 1)
+
+[node name="CSGBox3D43" type="CSGBox3D" parent="Map" unique_id=835572735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 197.73344, -60.229733, 0)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D44" type="CSGBox3D" parent="Map" unique_id=1157476654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213.1733, -60.06738, -0.23852539)
+use_collision = true
+size = Vector3(14.906239, 0.67529297, 0.5229492)
+
+[node name="CSGBox3D45" type="CSGBox3D" parent="Map" unique_id=789738200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 228.62708, -58.39349, 0.28216553)
+use_collision = true
+size = Vector3(19.67527, 1, 0.43566895)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Map" unique_id=655436484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 128.00967, -2.2487988, 2.966467)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Map" unique_id=1015674359]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 137.53177, -50.368748, 2.966467)
+use_collision = true
+size = Vector3(8.145462, 1, 1)
+
+[node name="CSGBox3D26" type="CSGBox3D" parent="Map" unique_id=2027093494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 142.40384, 8.12582, 2.966467)
+use_collision = true
+size = Vector3(1.6748047, 45.132324, 11.573242)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Map" unique_id=453996268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.14815, -54.934605, -2.030448)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D46" type="CSGBox3D" parent="Map" unique_id=47916338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.14815, -57.08136, 2.6806116)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D47" type="CSGBox3D" parent="Map" unique_id=899472183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.14815, -56.04932, -0.04933715)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Map" unique_id=234076383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 249.56317, -53.009403, 0.8201399)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D48" type="CSGBox3D" parent="Map" unique_id=568937108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 244.99582, -54.048275, 0.8201399)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Map" unique_id=675676125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 253.73259, -50.868046, 6.0832777)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D49" type="CSGBox3D" parent="Map" unique_id=527232502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 251.67805, -52.261726, 3.8436232)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="Map" unique_id=830087356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 260.01343, -49.30833, 2.766241)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.4243164)
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="Map" unique_id=631460130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 260.01343, -47.404575, -6.4992914)
+use_collision = true
+size = Vector3(1.4849739, 1, 7.286865)
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="Map" unique_id=1480954787]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 257.82794, -46.20427, -6.4992914)
+use_collision = true
+size = Vector3(1.4849739, 1, 7.286865)
+
+[node name="CSGBox3D19" type="CSGBox3D" parent="Map" unique_id=2078881013]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 254.84172, -44.485825, -6.4992914)
+use_collision = true
+size = Vector3(1.4849739, 1, 7.286865)
+
+[node name="CSGBox3D20" type="CSGBox3D" parent="Map" unique_id=723966533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252.02582, -42.507267, -4.5083857)
+use_collision = true
+size = Vector3(1.4849739, 1, 3.3050537)
+
+[node name="CSGBox3D21" type="CSGBox3D" parent="Map" unique_id=1053856409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 260.7249, -42.856556, -12.615706)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.7473755)
+
+[node name="CSGBox3D22" type="CSGBox3D" parent="Map" unique_id=136613315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 256.4319, -40.872166, -12.615706)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.7473755)
+
+[node name="CSGBox3D23" type="CSGBox3D" parent="Map" unique_id=1110265894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.33487, -40.872166, -0.4319086)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.0515442)
+
+[node name="CSGBox3D24" type="CSGBox3D" parent="Map" unique_id=920604882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 267.36487, -39.529896, -2.22971)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.0515442)
+
+[node name="CSGBox3D25" type="CSGBox3D" parent="Map" unique_id=1735406637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 262.45532, -38.603973, 1.6471281)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.0515442)
+
+[node name="CSGBox3D50" type="CSGBox3D" parent="Map" unique_id=680887103]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 266.6408, -37.88788, 1.6471281)
+use_collision = true
+size = Vector3(1.4849739, 1, 1.0515442)
+
+[node name="CSGBox3D28" type="CSGBox3D" parent="Map" unique_id=317101091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -36.081474, 3.9350996)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D29" type="CSGBox3D" parent="Map" unique_id=1700489408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -36.081474, 0.21168041)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D30" type="CSGBox3D" parent="Map" unique_id=813727897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -33.9159, -4.070315)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D31" type="CSGBox3D" parent="Map" unique_id=441568083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -32.78177, -5.8798456)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D32" type="CSGBox3D" parent="Map" unique_id=591782208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -31.880608, -7.6836505)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D33" type="CSGBox3D" parent="Map" unique_id=1328439099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 279.2163, -29.962776, -9.865932)
+use_collision = true
+size = Vector3(20.092922, 1, 0.6043854)
+
+[node name="CSGBox3D34" type="CSGBox3D" parent="Map" unique_id=1020842702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 270.87494, -28.80637, -12.567335)
+use_collision = true
+size = Vector3(3.4102306, 1, 0.6043854)
+
+[node name="CSGBox3D35" type="CSGBox3D" parent="Map" unique_id=989543063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 270.87494, -27.074036, -20.879986)
+use_collision = true
+size = Vector3(3.4102306, 1, 0.6043854)
+
+[node name="CSGBox3D36" type="CSGBox3D" parent="Map" unique_id=597078231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 264.31818, -25.677387, -19.81859)
+use_collision = true
+size = Vector3(3.4102306, 1, 0.6043854)
+
+[node name="CSGBox3D37" type="CSGBox3D" parent="Map" unique_id=36366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 258.09375, -25.677387, -17.377438)
+use_collision = true
+size = Vector3(1.0278692, 1, 1.639595)
+
+[node name="CSGBox3D38" type="CSGBox3D" parent="Map" unique_id=1915229045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 258.09375, -25.758453, -9.792066)
+use_collision = true
+size = Vector3(1.0278692, 1, 1.639595)
+
+[node name="CSGBox3D39" type="CSGBox3D" parent="Map" unique_id=1062084146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 258.09375, -24.007883, -2.4732852)
+use_collision = true
+size = Vector3(1.0278692, 1, 1.639595)
+
+[node name="CSGBox3D40" type="CSGBox3D" parent="Map" unique_id=1778445272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 258.09375, -21.931107, -8.004284)
+use_collision = true
+size = Vector3(1.0278692, 1, 1.639595)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="Map" unique_id=1191989744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.21199, -21.059574, -1.2610722)
+use_collision = true
+size = Vector3(8.145462, 1, 9.455078)
+
+[node name="Moneda" parent="." unique_id=1802756855 instance=ExtResource("2_go701")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.134635, 1.8219137, 0)
+
+[node name="Moneda2" parent="." unique_id=470445643 instance=ExtResource("2_go701")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.379, -1.0855963, 2.8894403)
+
+[node name="Moneda3" parent="." unique_id=1640282579 instance=ExtResource("2_go701")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 266.6595, -36.862785, 1.6923475)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1943666416]
+stream = ExtResource("3_5a7ea")
+autoplay = true
+
+[node name="Goal" type="Area3D" parent="." unique_id=1027461770]
+script = SubResource("GDScript_5a7ea")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Goal" unique_id=1145962594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.8717, -18.29132, -1.3410835)
+shape = SubResource("BoxShape3D_5a7ea")
+debug_color = Color(0.9142618, 0.25390515, 0.37535605, 0.41960785)
+
+[node name="Sprite3D" type="Sprite3D" parent="Goal" unique_id=812520497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241.66455, -19.925451, 0)
+billboard = 1
+texture = SubResource("ViewportTexture_8j60k")
+
+[node name="VictoryUI" type="CanvasLayer" parent="." unique_id=142868441]
+visible = false
+
+[node name="Label" type="Label" parent="VictoryUI" unique_id=74422540]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -153.99994
+offset_top = -64.0
+offset_right = -89.99994
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(5, 5)
+size_flags_horizontal = 4
+text = "Ganaste"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1848837308]
+
+[node name="MonedasLabel" type="Label" parent="HUD" unique_id=590580465]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -551.0
+offset_top = -299.0
+offset_right = -471.0
+offset_bottom = -276.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+text = "MONEDAS"
+
+[node name="Checkoinpts" type="Node3D" parent="." unique_id=824661811]
+
+[node name="Checkpoint" type="Area3D" parent="Checkoinpts" unique_id=982822492 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.624083, 0.7328868, 3.4283476)
+script = ExtResource("4_8j60k")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint" unique_id=1137770744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="Checkpoint2" type="Area3D" parent="Checkoinpts" unique_id=1243039500 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.60618, -3.4389756, -0.008882284)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint2" unique_id=932249687]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.045578, -3.2270377, 0)
+shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="Checkpoint3" type="Area3D" parent="Checkoinpts" unique_id=1707964234 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.20972, -2.0846684, 2.899848)
+script = ExtResource("4_8j60k")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint3" unique_id=1521003777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="Checkpoint4" type="Area3D" parent="Checkoinpts" unique_id=1609591446 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 139.90756, -50.429314, 2.9819794)
+script = ExtResource("4_8j60k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint4" unique_id=935015417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="Checkpoint5" type="Area3D" parent="Checkoinpts" unique_id=2135372151 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 214.91199, -60.074516, -0.0683372)
+script = ExtResource("4_8j60k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint5" unique_id=2080230142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_fo5ed")
+
+[node name="Checkpoint6" type="Area3D" parent="Checkoinpts" unique_id=1396971906 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 266.5087, -37.736626, 1.6470053)
+script = ExtResource("4_8j60k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint6" unique_id=497646981]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_fo5ed")

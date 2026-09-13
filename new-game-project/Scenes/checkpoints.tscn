@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://jhbe85xekg7g"]
+
+[ext_resource type="Script" uid="uid://c0urpng6vohf6" path="res://Scenes/Checkpoint.gd" id="1_e0pgn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8j60k"]
+size = Vector3(1, 2.0567017, 0.7730713)
+
+[node name="Checkpoints" type="Node3D" unique_id=1993686270]
+
+[node name="Checkpoint" type="Area3D" parent="." unique_id=44090668 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.624083, 0.7328868, 0.19575071)
+script = ExtResource("1_e0pgn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint" unique_id=1845127997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_8j60k")
+
+[node name="Checkpoint2" type="Area3D" parent="." unique_id=2056109862 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.60618, 0.7328868, 0.19575071)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint2" unique_id=1496265583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.045578, -3.2270377, 0)
+shape = SubResource("BoxShape3D_8j60k")
+
+[node name="Checkpoint3" type="Area3D" parent="." unique_id=1464801030 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 131.20972, -2.3110783, 2.899848)
+script = ExtResource("1_e0pgn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint3" unique_id=253943173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_8j60k")
+
+[node name="Checkpoint4" type="Area3D" parent="." unique_id=177731784 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 139.90756, -50.429314, 2.9819794)
+script = ExtResource("1_e0pgn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint4" unique_id=435760836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_8j60k")
+
+[node name="Checkpoint5" type="Area3D" parent="." unique_id=1324071749 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 214.91199, -60.074516, -0.0683372)
+script = ExtResource("1_e0pgn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint5" unique_id=714418687]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_8j60k")
+
+[node name="Checkpoint6" type="Area3D" parent="." unique_id=659715568 groups=["Checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 266.5087, -37.736626, 1.6470053)
+script = ExtResource("1_e0pgn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint6" unique_id=823147346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
+shape = SubResource("BoxShape3D_8j60k")
