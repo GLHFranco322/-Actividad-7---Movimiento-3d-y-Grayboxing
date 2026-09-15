@@ -71,7 +71,7 @@ sky = SubResource("Sky_fo5ed")
 fog_enabled = true
 fog_light_color = Color(0.13270149, 0.0031465825, 0, 1)
 fog_sun_scatter = 0.18
-fog_density = 0.1767
+fog_density = 0.0881
 
 [node name="World" type="Node3D" unique_id=770086457]
 script = SubResource("GDScript_8j60k")
@@ -421,7 +421,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8085327, 0)
 shape = SubResource("BoxShape3D_fo5ed")
 
 [node name="Checkpoint2" type="Area3D" parent="Checkoinpts" unique_id=1243039500 groups=["Checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.60618, -3.4389756, -0.008882284)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.60618, 0.91287255, -0.008882284)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkoinpts/Checkpoint2" unique_id=932249687]
