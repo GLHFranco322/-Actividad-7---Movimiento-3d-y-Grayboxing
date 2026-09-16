@@ -8,6 +8,8 @@ const SPEED = 5.0
 const CROUCH_SPEED = 2.5
 const MOUSE_SENSITIVITY = 0.003
 const FALL_LIMIT = -150.0
+const STICK_SENSITIVITY = 3.0  # radianes por segundo, ajustar a gusto
+const STICK_DEADZONE = 0.2
 
 var spawn_position: Vector3
 var checkpoint_position: Vector3
@@ -118,6 +120,13 @@ func _try_dash():
 			can_air_dash = false
 
 func _physics_process(delta):
+	# Cámara con joystick (palanca derecha)
+	var look_dir = Input.get_vector(\"LookLeft\", \"LookRight\", \"LookUp\", \"LookDown\", STICK_DEADZONE)
+	if look_dir.length() > 0.0:
+		rotate_y(-look_dir.x * STICK_SENSITIVITY * delta)
+		pitch = clamp(pitch - look_dir.y * STICK_SENSITIVITY * delta, deg_to_rad(-89), deg_to_rad(89))
+		camera.rotation.x = pitch
+	
 	if global_position.y <= FALL_LIMIT:
 		_respawn()
 		return
